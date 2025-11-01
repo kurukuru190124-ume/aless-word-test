@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>【Sans Forgetica】専門用語 記憶テスト（10秒）</title>
+    <style>
+        /* ★修正点: ローカルファイルを参照するようパスを修正しました（手順通りにフォントを保存してください） */
+        @font-face {
+            font-family: 'SansForgetica';
+            /* 同じフォルダにあるフォントファイルを指定 */
+            src: url('SansForgetica-Regular.woff2') format('woff2'); 
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            font-family: 'SansForgetica', Arial, sans-serif; /* SansForgeticaがなければArialなどを使用 */
+            text-align: center;
+            padding: 40px 20px;
+            background-color: #fff8e1; 
+        }
+        #word-container {
+            font-size: 100px; 
+            font-weight: 700;
+            margin: 20px auto;
+            color: #ff6f00; 
+            height: 120px; 
+            line-height: 120px;
+            visibility: hidden; /* 初期状態では非表示 */
+        }
+        #timer {
+            font-size: 28px;
+            color: #bf360c; 
+            margin-bottom: 20px;
+        }
+        #test-area {
+            max-width: 650px;
+            margin: 20px auto;
+        }
+        .word-input {
+            margin: 5px; padding: 8px; font-size: 16px; width: 150px; text-align: center; border: 1px solid #ccc; display: inline-block; 
+        }
+        button {
+            padding: 15px 40px; 
+            font-size: 24px;
+            cursor: pointer;
+            background-color: #ff6f00; 
+            color: white;
+            border: none;
+            border-radius: 8px; 
+            margin-top: 30px; 
+        }
+        .mail-link {
+            display: inline-block; margin-top: 30px; padding: 15px 30px; background-color: #0288d1; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🧠 【Sans Forgetica】専門用語記憶テスト（10語 x 10秒 / 順不同）</h1>
+    <p id="instructions">下のボタンを押すとテストが開始されます。1語につき**10秒間**表示されます。（※読みづらいフォントです）</p>
+    <div id="timer"></div>
+    
+    <div id="word-container"></div>
+    
+    <button id="start-button">テスト開始</button>
+
+    <div id="test-area" style="display: none;">
+        <h2>📝 単語の入力</h2>
+        <p>表示された10語を思い出せる限り**順不同**で入力してください。</p>
+        <div id="input-fields"></div>
+        <button id="check-button">結果をチェック</button>
+    </div>
+    
+    <div id="results-area"></div>
+    
+    <script>
+        const RECIPIENT_EMAIL = "kurukuru190124@gmail.com"; 
+        const WORD_LIST = [
+            "Pericardium", "Neuropathy", "Immunology", "Hypothesis", "Paradigm", 
+            "Sovereignty", "Mitigation", "Austerity", "Cognition", "Sustainability" 
+        ];
+        
+        const DISPLAY_TIME = 10;
+        let currentWordIndex = 0;
+        let countdownInterval;
+        let remainingWordsForCheck = [];
+
+        function getElements() { 
+            return { 
+                wordContainer: document.getElementById('word-container'), timerDisplay: document.getElementById('timer'), testArea: document.getElementById('test-area'), startButton: document.getElementById('start-button'), resultsArea: document.getElementById('results-area'), instructions: document.getElementById('instructions'), inputFields: document.getElementById('input-fields'), checkButton: document.getElementById('check-button'),
+            }; 
+        }
+
+        function startTest(elements) {
+            if(countdownInterval) clearInterval(countdownInterval); 
+            elements.startButton.style.display = 'none';
+            elements.testArea.style.display = 'none';
+            elements.resultsArea.innerHTML = '';
+            elements.instructions.textContent = '単語表示中... 集中して覚えてください。';
+            currentWordIndex = 0;
+            elements.wordContainer.textContent = ''; 
+            elements.wordContainer.style.visibility = 'visible';
+            
+            elements.inputFields.innerHTML = '';
+            for(let i = 0; i < WORD_LIST.length; i++) {
+                elements.inputFields.innerHTML += `<input type="text" id="word-${i}" class="word-input" placeholder="回答 ${i + 1}">`;
+            }
+
+            displayWord(elements);
+        }
+
+        function displayWord(elements) {
+            if (currentWordIndex < WORD_LIST.length) {
+                const word = WORD_LIST[currentWordIndex];
+                elements.wordContainer.textContent = word;
+                
+                let timeLeft = DISPLAY_TIME;
+                elements.timerDisplay.textContent = `単語 ${currentWordIndex + 1} / ${WORD_LIST.length} - 残り ${timeLeft} 秒`;
+
+                countdownInterval = setInterval(() => {
+                    timeLeft--;
+                    elements.timerDisplay.textContent = `単語 ${currentWordIndex + 1} / ${WORD_LIST.length} - 残り ${timeLeft} 秒`;
+
+                    if (timeLeft <= 0) {
+                        clearInterval(countdownInterval);
+                        currentWordIndex++;
+                        displayWord(elements);
+                    }
+                }, 1000);
+            } else {
+                endDisplayTime(elements);
+            }
+        }
+
+        function endDisplayTime(elements) {
+            elements.wordContainer.style.visibility = 'hidden';
+            elements.wordContainer.textContent = ''; 
+            elements.timerDisplay.textContent = "記憶テストの時間です。";
+            elements.instructions.textContent = '思い出せる限り、正確に入力してください。';
+            elements.testArea.style.display = 'block';
+            document.getElementById('word-0').focus();
+        }
+
+        function checkResults(elements) {
+            let correctCount = 0;
+            let resultDetails = "--- 回答の詳細 ---\n";
+            let userAnswers = [];
+            remainingWordsForCheck = WORD_LIST.map(word => word.toUpperCase());
+            
+            for (let i = 0; i < WORD_LIST.length; i++) {
+                const inputElement = document.getElementById(`word-${i}`);
+                const userAnswer = inputElement.value.trim().toUpperCase();
+                userAnswers.push(inputElement.value.trim());
+                const correctIndex = remainingWordsForCheck.indexOf(userAnswer);
+                
+                if (userAnswer !== "" && correctIndex !== -1) {
+                    correctCount++;
+                    inputElement.style.backgroundColor = '#e8f5e9'; 
+                    remainingWordsForCheck.splice(correctIndex, 1); 
+                } else if (userAnswer !== "") {
+                    inputElement.style.backgroundColor = '#ffebee'; 
+                } else {
+                    inputElement.style.backgroundColor = 'white';
+                }
+            }
+
+            elements.resultsArea.innerHTML = `
+                <h2>🎉 テスト結果 🎉</h2>
+                <p>正解数: <strong style="color: blue;">${correctCount}</strong> / 10 語</p>
+                <p>記憶力向上トレーニングにお役立てください！</p>
+            `;
+            
+            let missedWords = WORD_LIST.filter(word => remainingWordsForCheck.includes(word.toUpperCase()));
+            
+            resultDetails += `--- ユーザーの入力内容 ---\n`;
+            userAnswers.forEach((answer, index) => { resultDetails += `回答 ${index + 1}: ${answer}\n`; });
+            resultDetails += `\n--- 不正解/未回答の正解単語 ---\n`;
+            resultDetails += (missedWords.length > 0) ? missedWords.join(", ") + "\n" : "なし (全問正解の可能性あり)\n";
+            
+            generateMailLink(correctCount, resultDetails, elements);
+        }
+        
+        function generateMailLink(count, details, elements) {
+            const subject = encodeURIComponent(`専門用語記憶テスト結果報告(Sans Forgetica): ${count} / 10 正解`);
+            let mailBody = `【高度専門用語 記憶テスト結果（Sans Forgetica）】\n\n`;
+            mailBody += `正解数: ${count} / 10 語\n表示時間: 1単語あたり ${DISPLAY_TIME} 秒\n\n`;
+            mailBody += `------------------------------------\n${details}------------------------------------\nこのメールは自動生成されました。`;
+            const body = encodeURIComponent(mailBody);
+            
+            const mailtoLink = `mailto:${RECIPIENT_EMAIL}?subject=${subject}&body=${body}`;
+            
+            elements.resultsArea.innerHTML += `
+                <a href="${mailtoLink}" class="mail-link" target="_blank">
+                    📧 結果をメールで送信する (宛先: ${RECIPIENT_EMAIL})
+                </a>
+                <p style="margin-top: 10px; font-size: 14px; color: #666;">（このリンクをクリックすると、お使いのメールアプリが起動します）</p>
+            `;
+            elements.startButton.style.display = 'none'; 
+        }
+
+        // ★★★ 最終解決策: DOMContentLoadedリスナーでイベントを設定 ★★★
+        document.addEventListener('DOMContentLoaded', () => {
+            const elements = getElements();
+            
+            // HTML要素が全て読み込まれた後に、ボタンにイベントリスナーを設定する
+            elements.startButton.addEventListener('click', () => {
+                startTest(elements);
+            });
+            
+            elements.checkButton.addEventListener('click', () => {
+                checkResults(elements);
+            });
+        });
+    </script>
+</body>
+</html>
