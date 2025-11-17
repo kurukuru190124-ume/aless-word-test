@@ -169,7 +169,7 @@
             submitToGoogleForm(correctCount, userAnswers, missedWords, elements);
         }
         
-        // ★★★ 修正後の送信関数：Imageオブジェクトを使ったGETリクエスト ★★★
+        // ★★★ 最終修正後の送信関数：隠しIframeを使ったPOSTリクエスト ★★★
         function submitToGoogleForm(count, userAnswers, missedWords, elements) {
             if (FORM_ACTION_URL.includes("YOUR_FORM_ACTION_URL_HERE")) {
                 elements.resultsArea.innerHTML += `<p class="submit-info" style="background-color: #d32f2f;">🚨 エラー: Google FormのURLが設定されていません。手動で結果を記録してください。</p>`;
@@ -177,36 +177,61 @@
                 return;
             }
 
-            // 1. FORM_ACTION_URLをGETリクエスト用のベースURLに変換
-            //    例: .../formResponse -> .../formResponse?
-            const FORM_BASE_URL = FORM_ACTION_URL.replace("/formResponse", "/formResponse?");
-            const TEST_TYPE_FOR_FORM = "UD代替フォント"; // テスト名を設定
-            
+            const TEST_TYPE_FOR_FORM = "UD代替フォント";
             const scoreText = `${TEST_TYPE_FOR_FORM} (${count} / 10 正解)`;
             const answersText = userAnswers.join('; ');
             const missedText = missedWords.length > 0 ? missedWords.join(', ') : "なし";
 
-            // 2. データをURLエンコード
-            const params = new URLSearchParams();
-            // ★修正点: ENTRY_IDの変数名を直接キーとして使用 (例: entry.1096815834)
-            params.append(ENTRY_ID_SCORE, scoreText);
-            params.append(ENTRY_ID_ANSWERS, answersText);
-            params.append(ENTRY_ID_MISSED, missedText);
+            // 1. 隠しIframeを作成 (再利用可能)
+            const iframeName = 'gform_target';
+            let iframe = document.getElementById(iframeName);
+            if (!iframe) {
+                iframe = document.createElement('iframe');
+                iframe.name = iframeName;
+                iframe.id = iframeName;
+                // 非表示にしてページ遷移を隠す
+                iframe.style.display = 'none'; 
+                document.body.appendChild(iframe);
+            }
             
-            // 3. 最終URLを構築
-            const finalUrl = FORM_BASE_URL + params.toString();
+            // 2. 一時的なフォームを作成
+            const form = document.createElement('form');
+            form.action = FORM_ACTION_URL;
+            form.method = 'POST'; // POSTメソッドを使用
+            form.target = iframeName; // Iframeに送信先を設定
+            form.style.display = 'none';
 
-            // 4. Imageオブジェクトを使ってサイレント送信
-            const img = new Image();
-            img.src = finalUrl; // この処理でGETリクエストが送信される
+            // 3. 送信データフィールドを作成し、フォームに追加
+            const data = [
+                { name: ENTRY_ID_SCORE, value: scoreText },
+                { name: ENTRY_ID_ANSWERS, value: answersText },
+                { name: ENTRY_ID_MISSED, value: missedText }
+            ];
 
+            data.forEach(item => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = item.name;
+                input.value = item.value;
+                form.appendChild(input);
+            });
+
+            // 4. フォームをDOMに追加し、送信
+            document.body.appendChild(form);
+            form.submit(); // POST送信を実行
+            
+            // 5. 完了メッセージ表示
             elements.resultsArea.innerHTML = `
                 <h2>🎉 テスト完了</h2>
                 <p>正解数: <strong style="color: blue;">${count}</strong> / 10 語</p>
                 <p class="submit-info" style="background-color: #4CAF50;">✅ 結果は匿名で研究者に送信されました。ご協力ありがとうございました。</p>
             `;
-
-            elements.startButton.style.display = 'none'; 
+            elements.startButton.style.display = 'none';
+            
+            // クリーンアップ (フォームの削除は少し遅らせて、送信を確実に完了させる)
+            setTimeout(() => {
+                form.remove();
+            }, 1000); 
         }
         
         document.addEventListener('DOMContentLoaded', () => {
