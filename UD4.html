@@ -22,39 +22,15 @@
         #test-content h1, #test-content p, #test-content h2 { font-family: 'M PLUS Rounded 1c', Meiryo, '游ゴシック', YuGothic, sans-serif; }
         #word-container { font-family: 'M PLUS Rounded 1c', Meiryo, sans-serif; font-size: 100px; font-weight: 700; margin: 20px auto; color: #000000; height: 120px; line-height: 120px; visibility: hidden; }
         #timer { font-size: 28px; color: #d32f2f; margin-bottom: 20px; }
-        #test-area { max-width: 650px; margin: 20px auto; }
+        #test-area { max-width: 650px; margin: 20px auto; margin-top: -50px; /* 上に持ち上げる調整 */ }
         .word-input { margin: 5px; padding: 8px; font-size: 16px; width: 150px; text-align: center; border: 1px solid #ccc; display: inline-block; }
         button#start-button { padding: 15px 40px; font-size: 24px; cursor: pointer; background-color: #00796b; color: white; border: none; border-radius: 8px; margin-top: 30px; }
         #check-button { padding: 10px 20px; font-size: 18px; background-color: #00796b; color: white; border: none; border-radius: 5px; cursor: pointer; }
         
         /* ★★★ 最終提出ボタンの強調スタイル ★★★ */
-        .submit-link-container { 
-            margin-top: 40px; 
-            padding: 20px; 
-            border: 3px solid #ff4500; /* 目立つオレンジ色の枠線 */
-            background-color: #fffaf0; /* 薄いクリーム色の背景 */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
-        }
-
-        .submit-link-container a { 
-            display: block; 
-            width: 80%; 
-            margin: 15px auto 10px auto; 
-            padding: 20px; 
-            font-size: 24px; 
-            font-weight: bold; 
-            background-color: #ff6347; /* 鮮やかな赤に近いオレンジ色 */
-            color: white; 
-            text-decoration: none; 
-            border-radius: 10px; 
-            transition: background-color 0.2s, transform 0.2s;
-        }
-
-        .submit-link-container a:hover { 
-            background-color: #e55338;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        }
+        .submit-link-container { margin-top: 40px; padding: 20px; border: 3px solid #ff4500; background-color: #fffaf0; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+        .submit-link-container a { display: block; width: 80%; margin: 15px auto 10px auto; padding: 20px; font-size: 24px; font-weight: bold; background-color: #ff6347; color: white; text-decoration: none; border-radius: 10px; transition: background-color 0.2s, transform 0.2s; }
+        .submit-link-container a:hover { background-color: #e55338; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); }
     </style>
 </head>
 <body>
