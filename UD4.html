@@ -6,6 +6,8 @@
     <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700&display=swap" rel="stylesheet">
     
     <style>
+        /* CSSリセットと安全な設定 */
+        html, body { padding: 0; margin: 0; min-height: 100vh; }
         body { font-family: Meiryo, '游ゴシック', 'YuGothic', sans-serif; text-align: center; padding: 40px 20px; background-color: #f0f0f0; }
         /* 同意セクションのスタイル */
         #consent-section { max-width: 800px; margin: 0 auto 40px; padding: 30px; border: 1px solid #ccc; text-align: left; background-color: #ffffff; line-height: 1.6; }
@@ -14,13 +16,18 @@
         .checkbox-item input[type="checkbox"] { margin-right: 10px; margin-top: 5px; }
         .checkbox-item label { flex-grow: 1; }
         /* テスト本体（初期状態では非表示） */
-        #test-content { display: none; padding-top: 20px; margin-top: 0; }
+        #test-content { 
+            display: none; 
+            padding-top: 20px; 
+            margin-top: 0; /* ★安全なマージンに戻す */
+        }
         /* 次へボタンのスタイル */
         #next-button { display: none; margin-top: 20px; padding: 10px 20px; font-size: 18px; background-color: #00796b; color: white; border: none; border-radius: 5px; cursor: pointer; }
         
         /* 以下、テスト本体のスタイル */
-        #test-content h1, #test-content p, #test-content h2 { font-family: 'M PLUS Rounded 1c', Meiryo, sans-serif; margin: 5px 0; }
-        #word-container { font-family: 'M PLUS Rounded 1c', Meiryo, sans-serif; font-size: 100px; font-weight: 700; margin: 20px auto; color: #000000; height: 120px; line-height: 120px; visibility: hidden; }
+        #test-content h1, #test-content h2 { font-family: 'M PLUS Rounded 1c', Meiryo, sans-serif; margin: 5px 0; }
+        #test-content p { font-family: 'M PLUS Rounded 1c', Meiryo, sans-serif; margin: 5px 0; }
+        #word-container { font-family: 'M PLUS Rounded 1c', Meiryo, sans-serif; font-size: 100px; font-weight: 700; margin: 10px auto; color: #000000; height: 120px; line-height: 120px; visibility: hidden; }
         #timer { font-size: 28px; color: #d32f2f; margin-bottom: 10px; }
         #test-area { max-width: 650px; margin: 20px auto; margin-top: 0; }
         .word-input { margin: 5px; padding: 8px; font-size: 16px; width: 150px; text-align: center; border: 1px solid #ccc; display: inline-block; }
@@ -28,7 +35,7 @@
         #check-button { padding: 10px 20px; font-size: 18px; background-color: #00796b; color: white; border: none; border-radius: 5px; cursor: pointer; }
         
         /* 提出ボタンの強調スタイル */
-        .submit-link-container { margin-top: 40px; padding: 20px; border: 3px solid #ff4500; background-color: #fffaf0; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+        .submit-link-container { margin-top: 20px; padding: 15px; border: 3px solid #ff4500; background-color: #fffaf0; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
         .submit-link-container a { display: block; width: 80%; margin: 15px auto 10px auto; padding: 20px; font-size: 24px; font-weight: bold; background-color: #ff6347; color: white; text-decoration: none; border-radius: 10px; transition: background-color 0.2s, transform 0.2s; }
         .submit-link-container a:hover { background-color: #e55338; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); }
     </style>
@@ -64,7 +71,7 @@
     
     <div id="test-content">
         <h1>📚 【UD代替フォント】専門用語記憶テスト（10語 x 10秒 / 順不同）</h1>
-        <p id="instructions">下のボタンを押すとテストが開始されます。1語につき**10秒間**表示されます。</p>
+        <p id="instructions">下のボタンを押すとテストが開始されます。</p>
         <div id="timer"></div>
         <div id="word-container"></div>
         <button id="start-button">テスト開始</button>
