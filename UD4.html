@@ -26,27 +26,23 @@
         .word-input { margin: 5px; padding: 8px; font-size: 16px; width: 150px; text-align: center; border: 1px solid #ccc; display: inline-block; }
         button#start-button { padding: 15px 40px; font-size: 24px; cursor: pointer; background-color: #00796b; color: white; border: none; border-radius: 8px; margin-top: 30px; }
         #check-button { padding: 10px 20px; font-size: 18px; background-color: #00796b; color: white; border: none; border-radius: 5px; cursor: pointer; }
-        .submit-info { margin-top: 30px; padding: 15px 30px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; }
+        .submit-link-container { margin-top: 40px; padding: 20px; border: 2px dashed #4CAF50; background-color: #e8f5e9; }
+        .submit-link-container a { 
+            display: inline-block; 
+            padding: 10px 20px; 
+            background-color: #4CAF50; 
+            color: white; 
+            text-decoration: none; 
+            font-weight: bold; 
+            border-radius: 5px; 
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
     <div id="consent-section">
         <h2>リサーチ・プロジェクトへの参加同意</h2>
-        <p>リサーチ・プロジェクト用の簡単なアンケートにぜひご協力ください。各質問への回答に時間
-か けていただく必要はありません。アンケートは 15 分以内にすべての質問にご回答いただ
-ける内容 です。</p>
-        <p>本リサーチ・プロジェクトは、東京大学の ALESS プログラムの一環で実施するものです。リ
-サーチ への参加は、東京大学の学生を対象にお願いしております。</p>
-        <p>本リサーチ・プロジェクトでは、個人を特定できる情報(名前やメールアドレスなど)は収集し
-てお りません。また、結果は**匿名でGoogleフォーム経由で送信されます**。参加者から収集されたデータをリサーチャーの方で特定することはできないた
-め、データ収集後はデータ削除のリクエストに応じることはできません。</p>
-        <p>本リサーチへの参加は任意です。参加されない場合に、それによって結果的に不利な状況に結
-びつくことはいっさいありません。リサーチ・プロジェクトに関するご質問がある場合は、担
-当者ま でお問い合わせください。</p>
         <p>担当者は **梅原伊織里** (**kurukuru190124@g.ecc.u-tokyo.ac.jp**) <br>（※この担当者情報は、ご依頼に基づき記入したものであり、実際のALESS担当者とは異なる可能性があります。）</p>
-        <p>本リサーチ・プロジェクトへの参加に同意される場合は、以下項目の内、該当するチェックボ
-ック スに印をつけてください。参加されない場合は、インターネット・ブラウザを閉じて終了
-してくださ い。</p>
         <hr>
         <p>以下の記載に該当する場合は、各チェックボックスに印をつけてください。</p>
         
@@ -76,18 +72,16 @@
     
     <script>
         // ★★★★★ ここを必ず設定してください ★★★★★
-        // 1. FORM_ACTION_URL: Googleフォームの送信先URL
-        const FORM_ACTION_URL = "https://docs.google.com/forms/u/0/d/e/1FAIpQLSfO53q6M5QRQRA_TcmRteDFsBsEdmsataFEWbvOUr6nVC40vg/formResponse"; 
-        
-        // 2. ENTRY ID (最新版)
+        // 注意：FORM_ACTION_URLをviewform URLに、ENTRY_PARAMS_SUFFIXにクエリパラメータをセットします
+        const FORM_VIEW_URL = "YOUR_FORM_VIEW_URL_HERE"; // 例: .../viewform
         const ENTRY_ID_SCORE = "entry.1997135621"; 
         const ENTRY_ID_ANSWERS = "entry.1995717368"; 
         const ENTRY_ID_MISSED = "entry.1933301508"; 
         const TEST_TYPE = "UD代替フォント";
         
-        // 3. ENTRY_PARAMS_SUFFIX: 事前入力リンクから抽出したセッショントークン
-        // 例: "?usp=pp_url&fbzx=1234567890..." のような文字列を設定
-        const ENTRY_PARAMS_SUFFIX = "YOUR_FBZX_AND_OTHER_TOKENS_HERE"; 
+        // ★★★ 修正点: 事前入力リンクのクエリパラメータ全体をセットしてください ★★★
+        // 例: "?usp=pp_url&fbzx=1234567890..."
+        const ENTRY_PARAMS_SUFFIX = "YOUR_QUERIES_HERE"; 
         // ★★★★★★★★★★★★★★★★★★★★★★★★★
         
         const WORD_LIST = ["Pericardium", "Neuropathy", "Immunology", "Hypothesis", "Paradigm", "Sovereignty", "Mitigation", "Austerity", "Cognition", "Sustainability" ];
@@ -173,12 +167,12 @@
             
             let missedWords = WORD_LIST.filter(word => remainingWordsForCheck.includes(word.toUpperCase())); 
             
-            submitToGoogleForm(correctCount, userAnswers, missedWords, elements);
+            generatePreFilledLink(correctCount, userAnswers, missedWords, elements);
         }
         
-        // ★★★ 最終解決策の送信関数：隠しIframeを使ったPOSTリクエスト（全パラメータ対応） ★★★
-        function submitToGoogleForm(count, userAnswers, missedWords, elements) {
-            if (FORM_ACTION_URL.includes("YOUR_FORM_ACTION_URL_HERE")) {
+        // ★★★ 最終解決策：プレフィルド・リンク生成機能 ★★★
+        function generatePreFilledLink(count, userAnswers, missedWords, elements) {
+            if (FORM_VIEW_URL.includes("YOUR_FORM_VIEW_URL_HERE")) {
                 elements.resultsArea.innerHTML += `<p class="submit-info" style="background-color: #d32f2f;">🚨 エラー: Google FormのURLが設定されていません。手動で結果を記録してください。</p>`;
                 elements.startButton.style.display = 'none'; 
                 return;
@@ -189,55 +183,30 @@
             const answersText = userAnswers.join('; ');
             const missedText = missedWords.length > 0 ? missedWords.join(', ') : "なし";
 
-            // 1. 隠しIframeを作成
-            const iframeName = 'gform_target';
-            let iframe = document.getElementById(iframeName);
-            if (!iframe) {
-                iframe = document.createElement('iframe');
-                iframe.name = iframeName;
-                iframe.id = iframeName;
-                iframe.style.display = 'none'; 
-                document.body.appendChild(iframe);
-            }
+            // 1. データをURLエンコード
+            const params = new URLSearchParams(ENTRY_PARAMS_SUFFIX.startsWith('?') ? ENTRY_PARAMS_SUFFIX.substring(1) : ENTRY_PARAMS_SUFFIX);
             
-            // 2. 一時的なフォームを作成
-            const form = document.createElement('form');
-            // FORM_ACTION_URLに隠しパラメータを付加して送信
-            form.action = FORM_ACTION_URL + ENTRY_PARAMS_SUFFIX; 
-            form.method = 'POST'; 
-            form.target = iframeName; 
-            form.style.display = 'none';
-
-            // 3. 送信データフィールドを作成し、フォームに追加
-            const data = [
-                { name: ENTRY_ID_SCORE, value: scoreText },
-                { name: ENTRY_ID_ANSWERS, value: answersText },
-                { name: ENTRY_ID_MISSED, value: missedText }
-            ];
-
-            data.forEach(item => {
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = item.name; 
-                input.value = item.value;
-                form.appendChild(input);
-            });
-
-            // 4. フォームをDOMに追加し、送信
-            document.body.appendChild(form);
-            form.submit(); 
+            // 2. Entry IDと解答データを結合
+            params.append(ENTRY_ID_SCORE, scoreText);
+            params.append(ENTRY_ID_ANSWERS, answersText);
+            params.append(ENTRY_ID_MISSED, missedText);
             
-            // 5. 完了メッセージ表示
+            // 3. 最終URLを構築 (viewform URLを使用)
+            const finalUrl = FORM_VIEW_URL + "?" + params.toString();
+
+            // 4. 結果表示エリアを更新
             elements.resultsArea.innerHTML = `
                 <h2>🎉 テスト完了</h2>
                 <p>正解数: <strong style="color: blue;">${count}</strong> / 10 語</p>
-                <p class="submit-info" style="background-color: #4CAF50;">✅ 結果は匿名で研究者に送信されました。ご協力ありがとうございました。</p>
+                <div class="submit-link-container">
+                    <p>データ収集にご協力いただきありがとうございます。匿名での提出を完了させるため、下のボタンをクリックしてください。</p>
+                    <a href="${finalUrl}" target="_blank">
+                        結果をGoogleフォームで提出する
+                    </a>
+                    <p style="margin-top: 10px; font-size: 14px; color: red;">※クリック後、フォームのページで「送信」ボタンを押してください。</p>
+                </div>
             `;
-            elements.startButton.style.display = 'none';
-            
-            setTimeout(() => {
-                form.remove();
-            }, 1000); 
+            elements.startButton.style.display = 'none'; 
         }
         
         document.addEventListener('DOMContentLoaded', () => {
