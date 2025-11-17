@@ -14,7 +14,11 @@
         .checkbox-item input[type="checkbox"] { margin-right: 10px; margin-top: 5px; }
         .checkbox-item label { flex-grow: 1; }
         /* テスト本体（初期状態では非表示） */
-        #test-content { display: none; padding-top: 20px; }
+        #test-content { 
+            display: none; 
+            padding-top: 10px; 
+            margin-top: -80px; /* ★修正点: 全体を上に持ち上げます */
+        }
         /* 次へボタンのスタイル */
         #next-button { display: none; margin-top: 20px; padding: 10px 20px; font-size: 18px; background-color: #00796b; color: white; border: none; border-radius: 5px; cursor: pointer; }
         
@@ -22,7 +26,7 @@
         #test-content h1, #test-content p, #test-content h2 { font-family: 'M PLUS Rounded 1c', Meiryo, '游ゴシック', YuGothic, sans-serif; }
         #word-container { font-family: 'M PLUS Rounded 1c', Meiryo, sans-serif; font-size: 100px; font-weight: 700; margin: 20px auto; color: #000000; height: 120px; line-height: 120px; visibility: hidden; }
         #timer { font-size: 28px; color: #d32f2f; margin-bottom: 20px; }
-        #test-area { max-width: 650px; margin: 20px auto; margin-top: -50px; /* 上に持ち上げる調整 */ }
+        #test-area { max-width: 650px; margin: 20px auto; margin-top: 0; }
         .word-input { margin: 5px; padding: 8px; font-size: 16px; width: 150px; text-align: center; border: 1px solid #ccc; display: inline-block; }
         button#start-button { padding: 15px 40px; font-size: 24px; cursor: pointer; background-color: #00796b; color: white; border: none; border-radius: 8px; margin-top: 30px; }
         #check-button { padding: 10px 20px; font-size: 18px; background-color: #00796b; color: white; border: none; border-radius: 5px; cursor: pointer; }
@@ -80,13 +84,13 @@
     
     <script>
         // 🚨 以下の4つの値を、作成したGoogleフォームのIDに置き換えてください 🚨
-        const FORM_VIEW_URL = "https://docs.google.com/forms/d/e/1FAIpQLSfO53q6M5QRQRA_TcmRteDFsBsEdmsataFEWbvOUr6nVC40vg/viewform"; 
+        const FORM_VIEW_URL = "YOUR_FORM_VIEW_URL_HERE"; 
         const ENTRY_ID_SCORE = "entry.1997135621"; 
         const ENTRY_ID_ANSWERS = "entry.1995717368"; 
         const ENTRY_ID_MISSED = "entry.1933301508"; 
         const TEST_TYPE = "UD代替フォント";
         // 🚨 修正点: 事前入力リンクのクエリパラメータ全体をセットしてください (例: ?usp=pp_url&fbzx=1234567890...)
-        const ENTRY_PARAMS_SUFFIX = "?usp=pp_url&"; 
+        const ENTRY_PARAMS_SUFFIX = "YOUR_QUERIES_HERE"; 
         // -------------------------------------------------------------
 
         const WORD_LIST = ["Pericardium", "Neuropathy", "Immunology", "Hypothesis", "Paradigm", "Sovereignty", "Mitigation", "Austerity", "Cognition", "Sustainability" ];
@@ -176,7 +180,7 @@
         }
         
         function generatePreFilledLink(count, userAnswers, missedWords, elements) {
-            if (FORM_VIEW_URL.includes("YOUR_FORM_VIEW_URL_HERE") || ENTRY_PARAMS_SUFFIX.includes("YOUR_QUERIES_HERE")) {
+            if (FORM_VIEW_URL.includes("https://docs.google.com/forms/d/e/1FAIpQLSfO53q6M5QRQRA_TcmRteDFsBsEdmsataFEWbvOUr6nVC40vg/viewform") || ENTRY_PARAMS_SUFFIX.includes("?usp=pp_url&")) {
                 elements.resultsArea.innerHTML += `<p class="submit-info" style="background-color: #d32f2f;">🚨 エラー: Google FormのURLが設定されていません。手動で結果を記録してください。</p>`;
                 elements.startButton.style.display = 'none'; 
                 return;
@@ -187,18 +191,14 @@
             const answersText = userAnswers.join('; ');
             const missedText = missedWords.length > 0 ? missedWords.join(', ') : "なし";
 
-            // 1. URLSearchParamsを使ってセッション情報（suffix）を初期化
             const params = new URLSearchParams(ENTRY_PARAMS_SUFFIX.startsWith('?') ? ENTRY_PARAMS_SUFFIX.substring(1) : ENTRY_PARAMS_SUFFIX);
             
-            // 2. Entry IDと解答データを結合
             params.append(ENTRY_ID_SCORE, scoreText);
             params.append(ENTRY_ID_ANSWERS, answersText);
             params.append(ENTRY_ID_MISSED, missedText);
             
-            // 3. 最終URLを構築 (viewform URLを使用)
             const finalUrl = FORM_VIEW_URL + "?" + params.toString();
 
-            // 4. 結果表示エリアを更新
             elements.resultsArea.innerHTML = `
                 <h2>🎉 テスト完了</h2>
                 <p>正解数: <strong style="color: blue;">${count}</strong> / 10 語</p>
