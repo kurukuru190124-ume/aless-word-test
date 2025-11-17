@@ -6,8 +6,6 @@
     <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700&display=swap" rel="stylesheet">
     
     <style>
-        /* CSSリセットと安全な設定 */
-        html, body { padding: 0; margin: 0; min-height: 100vh; }
         body { font-family: Meiryo, '游ゴシック', 'YuGothic', sans-serif; text-align: center; padding: 40px 20px; background-color: #f0f0f0; }
         /* 同意セクションのスタイル */
         #consent-section { max-width: 800px; margin: 0 auto 40px; padding: 30px; border: 1px solid #ccc; text-align: left; background-color: #ffffff; line-height: 1.6; }
@@ -16,24 +14,47 @@
         .checkbox-item input[type="checkbox"] { margin-right: 10px; margin-top: 5px; }
         .checkbox-item label { flex-grow: 1; }
         /* テスト本体（初期状態では非表示） */
-        #test-content { display: none; padding-top: 20px; margin-top: 0; }
+        #test-content { display: none; padding-top: 20px; }
         /* 次へボタンのスタイル */
         #next-button { display: none; margin-top: 20px; padding: 10px 20px; font-size: 18px; background-color: #00796b; color: white; border: none; border-radius: 5px; cursor: pointer; }
         
         /* 以下、テスト本体のスタイル */
-        #test-content h1, #test-content h2 { font-family: 'M PLUS Rounded 1c', Meiryo, sans-serif; margin: 5px 0; }
-        #test-content p { font-family: 'M PLUS Rounded 1c', Meiryo, sans-serif; margin: 5px 0; }
-        #word-container { font-family: 'M PLUS Rounded 1c', Meiryo, sans-serif; font-size: 100px; font-weight: 700; margin: 10px auto; color: #000000; height: 120px; line-height: 120px; visibility: hidden; }
-        #timer { font-size: 28px; color: #d32f2f; margin-bottom: 10px; }
-        #test-area { max-width: 650px; margin: 20px auto; margin-top: 0; }
+        #test-content h1, #test-content p, #test-content h2 { font-family: 'M PLUS Rounded 1c', Meiryo, '游ゴシック', YuGothic, sans-serif; }
+        #word-container { font-family: 'M PLUS Rounded 1c', Meiryo, sans-serif; font-size: 100px; font-weight: 700; margin: 20px auto; color: #000000; height: 120px; line-height: 120px; visibility: hidden; }
+        #timer { font-size: 28px; color: #d32f2f; margin-bottom: 20px; }
+        #test-area { max-width: 650px; margin: 20px auto; }
         .word-input { margin: 5px; padding: 8px; font-size: 16px; width: 150px; text-align: center; border: 1px solid #ccc; display: inline-block; }
         button#start-button { padding: 15px 40px; font-size: 24px; cursor: pointer; background-color: #00796b; color: white; border: none; border-radius: 8px; margin-top: 30px; }
         #check-button { padding: 10px 20px; font-size: 18px; background-color: #00796b; color: white; border: none; border-radius: 5px; cursor: pointer; }
         
-        /* 提出ボタンの強調スタイル */
-        .submit-link-container { margin-top: 20px; padding: 15px; border: 3px solid #ff4500; background-color: #fffaf0; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
-        .submit-link-container a { display: block; width: 80%; margin: 15px auto 10px auto; padding: 20px; font-size: 24px; font-weight: bold; background-color: #ff6347; color: white; text-decoration: none; border-radius: 10px; transition: background-color 0.2s, transform 0.2s; }
-        .submit-link-container a:hover { background-color: #e55338; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); }
+        /* ★★★ 最終提出ボタンの強調スタイル ★★★ */
+        .submit-link-container { 
+            margin-top: 40px; 
+            padding: 20px; 
+            border: 3px solid #ff4500; /* 目立つオレンジ色の枠線 */
+            background-color: #fffaf0; /* 薄いクリーム色の背景 */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+        }
+
+        .submit-link-container a { 
+            display: block; 
+            width: 80%; 
+            margin: 15px auto 10px auto; 
+            padding: 20px; 
+            font-size: 24px; 
+            font-weight: bold; 
+            background-color: #ff6347; /* 鮮やかな赤に近いオレンジ色 */
+            color: white; 
+            text-decoration: none; 
+            border-radius: 10px; 
+            transition: background-color 0.2s, transform 0.2s;
+        }
+
+        .submit-link-container a:hover { 
+            background-color: #e55338;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
     </style>
 </head>
 <body>
@@ -56,7 +77,7 @@
 してくださ い。</p>
         <hr>
         <p>以下の記載に該当する場合は、各チェックボックスに印をつけてください。</p>
-
+        
         <div class="checkbox-item"><input type="checkbox" class="consent-check" id="check1"><label for="check1">私は東京大学の在学生です。</label></div>
         <div class="checkbox-item"><input type="checkbox" class="consent-check" id="check2"><label for="check2">私は依頼内容を理解しています。</label></div>
         <div class="checkbox-item"><input type="checkbox" class="consent-check" id="check3"><label for="check3">私に関する収集データは匿名化されているため、リサーチ終了後にデータセットから私を特定することはできないことを理解しています。また私は、このため、本リサーチへの参加後は、私に関するデータの削除はリクエストできないことを理解しています。</label></div>
@@ -67,7 +88,7 @@
     
     <div id="test-content">
         <h1>📚 【UD代替フォント】専門用語記憶テスト（10語 x 10秒 / 順不同）</h1>
-        <p id="instructions">下のボタンを押すとテストが開始されます。</p>
+        <p id="instructions">下のボタンを押すとテストが開始されます。1語につき**10秒間**表示されます。</p>
         <div id="timer"></div>
         <div id="word-container"></div>
         <button id="start-button">テスト開始</button>
@@ -164,7 +185,7 @@
                     correctCount++; 
                     inputElement.style.backgroundColor = '#e8f5e9'; 
                     remainingWordsForCheck.splice(correctIndex, 1); 
-                } else if (userAnswers !== "") { 
+                } else if (userAnswer !== "") { 
                     inputElement.style.backgroundColor = '#ffebee'; 
                 } else { 
                     inputElement.style.backgroundColor = 'white'; 
@@ -175,49 +196,44 @@
             
             let missedWords = WORD_LIST.filter(word => remainingWordsForCheck.includes(word.toUpperCase())); 
             
-            generatePreFilledLink(count, userAnswers, missedWords, elements);
+            generatePreFilledLink(correctCount, userAnswers, missedWords, elements);
         }
         
-        // ★★★ 最終修正後の送信関数：文字列連結方式で構文エラーを回避 ★★★
         function generatePreFilledLink(count, userAnswers, missedWords, elements) {
             if (FORM_VIEW_URL.includes("YOUR_FORM_VIEW_URL_HERE") || ENTRY_PARAMS_SUFFIX.includes("YOUR_QUERIES_HERE")) {
-                elements.resultsArea.innerHTML += '<p class="submit-info" style="background-color: #d32f2f;">🚨 エラー: Google FormのURLが設定されていません。手動で結果を記録してください。</p>';
+                elements.resultsArea.innerHTML += `<p class="submit-info" style="background-color: #d32f2f;">🚨 エラー: Google FormのURLが設定されていません。手動で結果を記録してください。</p>`;
                 elements.startButton.style.display = 'none'; 
                 return;
             }
 
             const TEST_TYPE_FOR_FORM = "UD代替フォント";
-            const scoreText = TEST_TYPE_FOR_FORM + ' (' + count + ' / 10 正解)';
+            const scoreText = `${TEST_TYPE_FOR_FORM} (${count} / 10 正解)`;
             const answersText = userAnswers.join('; ');
-            const missedText = missedWords.length > 0 ? missedWords.join(', ') : 'なし';
+            const missedText = missedWords.length > 0 ? missedWords.join(', ') : "なし";
 
+            // 1. URLSearchParamsを使ってセッション情報（suffix）を初期化
             const params = new URLSearchParams(ENTRY_PARAMS_SUFFIX.startsWith('?') ? ENTRY_PARAMS_SUFFIX.substring(1) : ENTRY_PARAMS_SUFFIX);
             
+            // 2. Entry IDと解答データを結合
             params.append(ENTRY_ID_SCORE, scoreText);
             params.append(ENTRY_ID_ANSWERS, answersText);
             params.append(ENTRY_ID_MISSED, missedText);
             
+            // 3. 最終URLを構築 (viewform URLを使用)
             const finalUrl = FORM_VIEW_URL + "?" + params.toString();
 
-            // 文字列連結方式でHTMLコンテンツを構築
-            let htmlContent = "<h2>🎉 テスト完了</h2>";
-            htmlContent += '<p>正解数: <strong style="color: blue;">' + count + '</strong> / 10 語</p>';
-            
-            // スクロール指示
-            htmlContent += "<p style='color: red; font-weight: bold; margin: 15px 0;'>";
-            htmlContent += "↓↓↓ 画面をスクロールして、下の提出ボタンを押してください ↓↓↓";
-            htmlContent += "</p>";
-
-            // 提出ボタンコンテナ
-            htmlContent += "<div class='submit-link-container'>";
-            htmlContent += "<p>データ収集にご協力いただきありがとうございます。匿名での提出を完了させるため、下のボタンをクリックしてください。</p>";
-            // 外部リンクの href に finalUrl を挿入
-            htmlContent += "<a href='" + finalUrl + "' target='_blank'>結果をGoogleフォームで提出する</a>"; 
-            htmlContent += "<p style='margin-top: 10px; font-size: 14px; color: red;'>※クリック後、開かれたフォームで内容が正しいことを確認し、「送信」ボタンを押してください。</p>";
-            htmlContent += "</div>";
-
-            elements.resultsArea.innerHTML = htmlContent;
-            
+            // 4. 結果表示エリアを更新
+            elements.resultsArea.innerHTML = `
+                <h2>🎉 テスト完了</h2>
+                <p>正解数: <strong style="color: blue;">${count}</strong> / 10 語</p>
+                <div class="submit-link-container">
+                    <p>データ収集にご協力いただきありがとうございます。匿名での提出を完了させるため、下のボタンをクリックしてください。</p>
+                    <a href="${finalUrl}" target="_blank">
+                        結果をGoogleフォームで提出する
+                    </a>
+                    <p style="margin-top: 10px; font-size: 14px; color: red;">※クリック後、開かれたフォームで内容が正しいことを確認し、「送信」ボタンを押してください。</p>
+                </div>
+            `;
             elements.startButton.style.display = 'none'; 
         }
         
