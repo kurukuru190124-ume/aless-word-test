@@ -26,7 +26,35 @@
         .word-input { margin: 5px; padding: 8px; font-size: 16px; width: 150px; text-align: center; border: 1px solid #ccc; display: inline-block; }
         button#start-button { padding: 15px 40px; font-size: 24px; cursor: pointer; background-color: #00796b; color: white; border: none; border-radius: 8px; margin-top: 30px; }
         #check-button { padding: 10px 20px; font-size: 18px; background-color: #00796b; color: white; border: none; border-radius: 5px; cursor: pointer; }
-        .submit-info { margin-top: 30px; padding: 15px 30px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; }
+        
+        /* ★★★ 最終提出ボタンの強調スタイル ★★★ */
+        .submit-link-container { 
+            margin-top: 40px; 
+            padding: 20px; 
+            border: 3px solid #ff4500; /* 目立つオレンジ色の枠線 */
+            background-color: #fffaf0; /* 薄いクリーム色の背景 */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+        }
+
+        .submit-link-container a { 
+            display: block; 
+            width: 80%; 
+            margin: 15px auto 10px auto; 
+            padding: 20px; 
+            font-size: 24px; 
+            font-weight: bold; 
+            background-color: #ff6347; /* 鮮やかな赤に近いオレンジ色 */
+            color: white; 
+            text-decoration: none; 
+            border-radius: 10px; 
+            transition: background-color 0.2s, transform 0.2s;
+        }
+
+        .submit-link-container a:hover { 
+            background-color: #e55338;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
     </style>
 </head>
 <body>
@@ -38,16 +66,12 @@
         <p>本リサーチ・プロジェクトは、東京大学の ALESS プログラムの一環で実施するものです。リ
 サーチ への参加は、東京大学の学生を対象にお願いしております。</p>
         <p>本リサーチ・プロジェクトでは、個人を特定できる情報(名前やメールアドレスなど)は収集し
-てお りません。また、収集されたデータをリサーチャーの方で特定することはできないた
-め、デー タ収集後はデータ削除のリクエストに応じることはできません。</p>
+てお りません。また、結果は**匿名でGoogleフォーム経由で送信されます**。参加者から収集されたデータをリサーチャーの方で特定することはできないた
+め、データ収集後はデータ削除のリクエストに応じることはできません。</p>
         <p>本リサーチへの参加は任意です。参加されない場合に、それによって結果的に不利な状況に結
 びつくことはいっさいありません。リサーチ・プロジェクトに関するご質問がある場合は、担
 当者ま でお問い合わせください。</p>
-        
-        <p>担当者は **梅原伊織里** (**kurukuru190124@g.ecc.u-tokyo.ac.jp**)
-        <br>（※この担当者情報は、ご依頼に基づき記入したものであり、実際のALESS担当者とは異なる可能性があります。）
-        </p>
-
+        <p>担当者は **梅原伊織里** (**kurukuru190124@g.ecc.u-tokyo.ac.jp**) <br>（※この担当者情報は、ご依頼に基づき記入したものであり、実際のALESS担当者とは異なる可能性があります。）</p>
         <p>本リサーチ・プロジェクトへの参加に同意される場合は、以下項目の内、該当するチェックボ
 ック スに印をつけてください。参加されない場合は、インターネット・ブラウザを閉じて終了
 してくださ い。</p>
@@ -80,13 +104,13 @@
     
     <script>
         // 🚨 以下の4つの値を、作成したGoogleフォームのIDに置き換えてください 🚨
-        const FORM_VIEW_URL = "https://docs.google.com/forms/d/e/1FAIpQLSfO53q6M5QRQRA_TcmRteDFsBsEdmsataFEWbvOUr6nVC40vg/viewform"; 
+        const FORM_VIEW_URL = "YOUR_FORM_VIEW_URL_HERE"; 
         const ENTRY_ID_SCORE = "entry.1997135621"; 
         const ENTRY_ID_ANSWERS = "entry.1995717368"; 
         const ENTRY_ID_MISSED = "entry.1933301508"; 
         const TEST_TYPE = "UD代替フォント";
         // 🚨 修正点: 事前入力リンクのクエリパラメータ全体をセットしてください (例: ?usp=pp_url&fbzx=1234567890...)
-        const ENTRY_PARAMS_SUFFIX = "?usp=pp_url&"; 
+        const ENTRY_PARAMS_SUFFIX = "YOUR_QUERIES_HERE"; 
         // -------------------------------------------------------------
 
         const WORD_LIST = ["Pericardium", "Neuropathy", "Immunology", "Hypothesis", "Paradigm", "Sovereignty", "Mitigation", "Austerity", "Cognition", "Sustainability" ];
