@@ -178,17 +178,18 @@
             generatePreFilledLink(count, userAnswers, missedWords, elements);
         }
         
+        // ★★★ 最終修正後の送信関数：文字列連結方式で構文エラーを回避 ★★★
         function generatePreFilledLink(count, userAnswers, missedWords, elements) {
             if (FORM_VIEW_URL.includes("YOUR_FORM_VIEW_URL_HERE") || ENTRY_PARAMS_SUFFIX.includes("YOUR_QUERIES_HERE")) {
-                elements.resultsArea.innerHTML += `<p class="submit-info" style="background-color: #d32f2f;">🚨 エラー: Google FormのURLが設定されていません。手動で結果を記録してください。</p>`;
+                elements.resultsArea.innerHTML += '<p class="submit-info" style="background-color: #d32f2f;">🚨 エラー: Google FormのURLが設定されていません。手動で結果を記録してください。</p>';
                 elements.startButton.style.display = 'none'; 
                 return;
             }
 
             const TEST_TYPE_FOR_FORM = "UD代替フォント";
-            const scoreText = `${TEST_TYPE_FOR_FORM} (${count} / 10 正解)`;
+            const scoreText = TEST_TYPE_FOR_FORM + ' (' + count + ' / 10 正解)';
             const answersText = userAnswers.join('; ');
-            const missedText = missedWords.length > 0 ? missedWords.join(', ') : "なし";
+            const missedText = missedWords.length > 0 ? missedWords.join(', ') : 'なし';
 
             const params = new URLSearchParams(ENTRY_PARAMS_SUFFIX.startsWith('?') ? ENTRY_PARAMS_SUFFIX.substring(1) : ENTRY_PARAMS_SUFFIX);
             
@@ -198,29 +199,31 @@
             
             const finalUrl = FORM_VIEW_URL + "?" + params.toString();
 
-            elements.resultsArea.innerHTML = `
-                <h2>🎉 テスト完了</h2>
-                <p>正解数: <strong style="color: blue;">${count}</strong> / 10 語</p>
-                
-                <p style="color: red; font-weight: bold; margin: 15px 0;">
-                    ↓↓↓ 画面をスクロールして、下の提出ボタンを押してください ↓↓↓
-                </p>
+            // 文字列連結方式でHTMLコンテンツを構築
+            let htmlContent = "<h2>🎉 テスト完了</h2>";
+            htmlContent += '<p>正解数: <strong style="color: blue;">' + count + '</strong> / 10 語</p>';
+            
+            // スクロール指示
+            htmlContent += "<p style='color: red; font-weight: bold; margin: 15px 0;'>";
+            htmlContent += "↓↓↓ 画面をスクロールして、下の提出ボタンを押してください ↓↓↓";
+            htmlContent += "</p>";
 
-                <div class="submit-link-container">
-                    <p>データ収集にご協力いただきありがとうございます。匿名での提出を完了させるため、下のボタンをクリックしてください。</p>
-                    <a href="${finalUrl}" target="_blank">
-                        結果をGoogleフォームで提出する
-                    </a>
-                    <p style="margin-top: 10px; font-size: 14px; color: red;">※クリック後、開かれたフォームで内容が正しいことを確認し、「送信」ボタンを押してください。</p>
-                </div>
-            `;
+            // 提出ボタンコンテナ
+            htmlContent += "<div class='submit-link-container'>";
+            htmlContent += "<p>データ収集にご協力いただきありがとうございます。匿名での提出を完了させるため、下のボタンをクリックしてください。</p>";
+            // 外部リンクの href に finalUrl を挿入
+            htmlContent += "<a href='" + finalUrl + "' target='_blank'>結果をGoogleフォームで提出する</a>"; 
+            htmlContent += "<p style='margin-top: 10px; font-size: 14px; color: red;'>※クリック後、開かれたフォームで内容が正しいことを確認し、「送信」ボタンを押してください。</p>";
+            htmlContent += "</div>";
+
+            elements.resultsArea.innerHTML = htmlContent;
+            
             elements.startButton.style.display = 'none'; 
         }
         
         document.addEventListener('DOMContentLoaded', () => {
             const elements = getElements(); 
             
-            // チェックボックスのイベントリスナーを設定
             elements.consentCheckboxes.forEach(checkbox => {
                 checkbox.addEventListener('change', checkConsent);
             });
@@ -229,7 +232,6 @@
             elements.checkButton.addEventListener('click', () => { checkResults(elements); });
             elements.nextButton.addEventListener('click', () => { elements.consentSection.style.display = 'none'; elements.testContent.style.display = 'block'; });
             
-            // ページロード時の初期チェック
             checkConsent(); 
         });
     </script>
