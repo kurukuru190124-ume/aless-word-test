@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>【UD代替フォント】専門用語 記憶テスト</title>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: Meiryo, '游ゴシック', 'YuGothic', sans-serif; text-align: center; padding: 40px 20px; background-color: #f0f0f0; }
+        /* 同意セクションのスタイル */
+        #consent-section { max-width: 800px; margin: 0 auto 40px; padding: 30px; border: 1px solid #ccc; text-align: left; background-color: #ffffff; line-height: 1.6; }
+        #consent-section h2 { text-align: center; border-bottom: 2px solid #004d40; padding-bottom: 10px; margin-bottom: 20px; }
+        .checkbox-item { margin-top: 10px; display: flex; align-items: flex-start; }
+        .checkbox-item input[type="checkbox"] { margin-right: 10px; margin-top: 5px; }
+        .checkbox-item label { flex-grow: 1; }
+        /* テスト本体（初期状態では非表示） */
+        #test-content { 
+            display: none; 
+            padding-top: 20px; 
+            margin-top: 0; /* ★修正点: 負のマージンを削除 */
+        }
+        /* 次へボタンのスタイル */
+        #next-button { display: none; margin-top: 20px; padding: 10px 20px; font-size: 18px; background-color: #00796b; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        
+        /* 以下、テスト本体のスタイル */
+        #test-content h1, #test-content p, #test-content h2 { font-family: 'M PLUS Rounded 1c', Meiryo, sans-serif; margin: 5px 0; }
+        #word-container { font-family: 'M PLUS Rounded 1c', Meiryo, sans-serif; font-size: 100px; font-weight: 700; margin: 20px auto; color: #000000; height: 120px; line-height: 120px; visibility: hidden; }
+        #timer { font-size: 28px; color: #d32f2f; margin-bottom: 10px; }
+        #test-area { max-width: 650px; margin: 20px auto; margin-top: 0; }
+        .word-input { margin: 5px; padding: 8px; font-size: 16px; width: 150px; text-align: center; border: 1px solid #ccc; display: inline-block; }
+        button#start-button { padding: 15px 40px; font-size: 24px; cursor: pointer; background-color: #00796b; color: white; border: none; border-radius: 8px; margin-top: 30px; }
+        #check-button { padding: 10px 20px; font-size: 18px; background-color: #00796b; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        
+        /* 提出ボタンの強調スタイル */
+        .submit-link-container { margin-top: 40px; padding: 20px; border: 3px solid #ff4500; background-color: #fffaf0; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+        .submit-link-container a { display: block; width: 80%; margin: 15px auto 10px auto; padding: 20px; font-size: 24px; font-weight: bold; background-color: #ff6347; color: white; text-decoration: none; border-radius: 10px; transition: background-color 0.2s, transform 0.2s; }
+        .submit-link-container a:hover { background-color: #e55338; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); }
+    </style>
+</head>
+<body>
+    <div id="consent-section">
+        <h2>リサーチ・プロジェクトへの参加同意</h2>
+        <p>リサーチ・プロジェクト用の簡単なアンケートにぜひご協力ください。各質問への回答に時間
+か けていただく必要はありません。アンケートは 15 分以内にすべての質問にご回答いただ
+ける内容 です。</p>
+        <p>本リサーチ・プロジェクトは、東京大学の ALESS プログラムの一環で実施するものです。リ
+サーチ への参加は、東京大学の学生を対象にお願いしております。</p>
+        <p>本リサーチ・プロジェクトでは、個人を特定できる情報(名前やメールアドレスなど)は収集し
+てお りません。また、結果は**匿名でGoogleフォーム経由で送信されます**。参加者から収集されたデータをリサーチャーの方で特定することはできないた
+め、データ収集後はデータ削除のリクエストに応じることはできません。</p>
+        <p>本リサーチへの参加は任意です。参加されない場合に、それによって結果的に不利な状況に結
+びつくことはいっさいありません。リサーチ・プロジェクトに関するご質問がある場合は、担
+当者ま でお問い合わせください。</p>
+        <p>担当者は **梅原伊織里** (**kurukuru190124@g.ecc.u-tokyo.ac.jp**) <br>（※この担当者情報は、ご依頼に基づき記入したものであり、実際のALESS担当者とは異なる可能性があります。）</p>
+        <p>本リサーチ・プロジェクトへの参加に同意される場合は、以下項目の内、該当するチェックボ
+ック スに印をつけてください。参加されない場合は、インターネット・ブラウザを閉じて終了
+してくださ い。</p>
+        <hr>
+        <p>以下の記載に該当する場合は、各チェックボックスに印をつけてください。</p>
+
+        <div class="checkbox-item"><input type="checkbox" class="consent-check" id="check1"><label for="check1">私は東京大学の在学生です。</label></div>
+        <div class="checkbox-item"><input type="checkbox" class="consent-check" id="check2"><label for="check2">私は依頼内容を理解しています。</label></div>
+        <div class="checkbox-item"><input type="checkbox" class="consent-check" id="check3"><label for="check3">私に関する収集データは匿名化されているため、リサーチ終了後にデータセットから私を特定することはできないことを理解しています。また私は、このため、本リサーチへの参加後は、私に関するデータの削除はリクエストできないことを理解しています。</label></div>
+        <div class="checkbox-item"><input type="checkbox" class="consent-check" id="check4"><label for="check4">私は、自らの意思で本リサーチ・プロジェクトに参加することに同意します*</label></div>
+        
+        <button id="next-button">次へ</button>
+    </div>
+    
+    <div id="test-content">
+        <h1>📚 【UD代替フォント】専門用語記憶テスト（10語 x 10秒 / 順不同）</h1>
+        <p id="instructions">下のボタンを押すとテストが開始されます。1語につき**10秒間**表示されます。</p>
+        <div id="timer"></div>
+        <div id="word-container"></div>
+        <button id="start-button">テスト開始</button>
+        <div id="test-area" style="display: none;">
+            <h2>📝 単語の入力</h2>
+            <p>回答残り時間: <span id="answer-timer">90</span>秒</p>
+            <p>表示された10語を思い出せる限り**順不同**で入力してください。</p>
+            <div id="input-fields"></div>
+            <button id="check-button">結果をチェック</button>
+        </div>
+        <div id="results-area"></div>
+    </div>
+    
+    <script>
+        // 🚨 以下の4つの値を、作成したGoogleフォームのIDに置き換えてください 🚨
+        const FORM_VIEW_URL = "https://docs.google.com/forms/d/e/1FAIpQLSfO53q6M5QRQRA_TcmRteDFsBsEdmsataFEWbvOUr6nVC40vg/viewform"; 
+        const ENTRY_ID_SCORE = "entry.1997135621"; 
+        const ENTRY_ID_ANSWERS = "entry.1995717368"; 
+        const ENTRY_ID_MISSED = "entry.1933301508"; 
+        const TEST_TYPE = "UD代替フォント";
+        // 🚨 修正点: 事前入力リンクのクエリパラメータ全体をセットしてください (例: ?usp=pp_url&fbzx=1234567890...)
+        const ENTRY_PARAMS_SUFFIX = "?usp=pp_url&"; 
+        // -------------------------------------------------------------
+
+        const WORD_LIST = ["Pericardium", "Neuropathy", "Immunology", "Hypothesis", "Paradigm", "Sovereignty", "Mitigation", "Austerity", "Cognition", "Sustainability" ];
+        const DISPLAY_TIME = 10;
+        const ANSWER_TIME = 90; 
+        let currentWordIndex = 0;
+        let countdownInterval;
+        let answerTimerInterval;
+        let remainingWordsForCheck = [];
+
+        function checkConsent() {
+            const checkboxes = document.querySelectorAll('.consent-check');
+            const nextButton = document.getElementById('next-button');
+            let allChecked = true;
+            
+            checkboxes.forEach(cb => { if (!cb.checked) { allChecked = false; } });
+            if (allChecked) { nextButton.style.display = 'inline-block'; } else { nextButton.style.display = 'none'; }
+        }
+        function getElements() { 
+            return { 
+                wordContainer: document.getElementById('word-container'), timerDisplay: document.getElementById('timer'), testArea: document.getElementById('test-area'), startButton: document.getElementById('start-button'), resultsArea: document.getElementById('results-area'), instructions: document.getElementById('instructions'), inputFields: document.getElementById('input-fields'), checkButton: document.getElementById('check-button'), nextButton: document.getElementById('next-button'), consentSection: document.getElementById('consent-section'), testContent: document.getElementById('test-content'),
+                answerTimerDisplay: document.getElementById('answer-timer'), consentCheckboxes: document.querySelectorAll('.consent-check'),
+            }; 
+        }
+        function startTest(elements) {
+            if(countdownInterval) clearInterval(countdownInterval); if(answerTimerInterval) clearInterval(answerTimerInterval); 
+            elements.startButton.style.display = 'none'; elements.testArea.style.display = 'none'; elements.resultsArea.innerHTML = ''; elements.instructions.textContent = '単語表示中... 集中して覚えてください。'; currentWordIndex = 0; elements.wordContainer.textContent = ''; elements.wordContainer.style.visibility = 'visible'; 
+            elements.inputFields.innerHTML = ''; 
+            for(let i = 0; i < WORD_LIST.length; i++) { elements.inputFields.innerHTML += `<input type="text" id="word-${i}" class="word-input" placeholder="回答 ${i + 1}">`; } 
+            displayWord(elements);
+        }
+        function displayWord(elements) {
+            if (currentWordIndex < WORD_LIST.length) {
+                const word = WORD_LIST[currentWordIndex]; elements.wordContainer.textContent = word; let timeLeft = DISPLAY_TIME; elements.timerDisplay.textContent = `単語 ${currentWordIndex + 1} / ${WORD_LIST.length} - 残り ${timeLeft} 秒`;
+                countdownInterval = setInterval(() => { timeLeft--; elements.timerDisplay.textContent = `単語 ${currentWordIndex + 1} / ${WORD_LIST.length} - 残り ${timeLeft} 秒`;
+                    if (timeLeft <= 0) { clearInterval(countdownInterval); currentWordIndex++; displayWord(elements); }
+                }, 1000);
+            } else { endDisplayTime(elements); }
+        }
+        function endDisplayTime(elements) {
+            elements.wordContainer.style.visibility = 'hidden'; elements.wordContainer.textContent = ''; elements.timerDisplay.textContent = "記憶テストの時間です。"; elements.instructions.textContent = '思い出せる限り、正確に入力してください。'; elements.testArea.style.display = 'block'; document.getElementById('word-0').focus();
+            
+            let timeRemaining = ANSWER_TIME;
+            elements.answerTimerDisplay.textContent = timeRemaining;
+            
+            answerTimerInterval = setInterval(() => {
+                timeRemaining--;
+                elements.answerTimerDisplay.textContent = timeRemaining;
+                
+                if (timeRemaining <= 0) {
+                    clearInterval(answerTimerInterval);
+                    alert("回答時間が終了しました。自動的に採点結果を表示します。");
+                    checkResults(elements); 
+                }
+            }, 1000);
+        }
+        
+        function checkResults(elements) {
+            if(answerTimerInterval) clearInterval(answerTimerInterval); elements.checkButton.disabled = true; 
+            
+            let correctCount = 0; 
+            let userAnswers = []; 
+            remainingWordsForCheck = WORD_LIST.map(word => word.toUpperCase());
+            
+            for (let i = 0; i < WORD_LIST.length; i++) {
+                const inputElement = document.getElementById(`word-${i}`); 
+                const userAnswer = inputElement.value.trim().toUpperCase(); 
+                userAnswers.push(inputElement.value.trim()); 
+                const correctIndex = remainingWordsForCheck.indexOf(userAnswer);
+                
+                if (userAnswer !== "" && correctIndex !== -1) { 
+                    correctCount++; 
+                    inputElement.style.backgroundColor = '#e8f5e9'; 
+                    remainingWordsForCheck.splice(correctIndex, 1); 
+                } else if (userAnswers !== "") { 
+                    inputElement.style.backgroundColor = '#ffebee'; 
+                } else { 
+                    inputElement.style.backgroundColor = 'white'; 
+                }
+            }
+            
+            elements.resultsArea.innerHTML = `<h2>🎉 テスト結果 🎉</h2><p>正解数: <strong style="color: blue;">${correctCount}</strong> / 10 語</p>`;
+            
+            let missedWords = WORD_LIST.filter(word => remainingWordsForCheck.includes(word.toUpperCase())); 
+            
+            generatePreFilledLink(count, userAnswers, missedWords, elements);
+        }
+        
+        function generatePreFilledLink(count, userAnswers, missedWords, elements) {
+            if (FORM_VIEW_URL.includes("YOUR_FORM_VIEW_URL_HERE") || ENTRY_PARAMS_SUFFIX.includes("YOUR_QUERIES_HERE")) {
+                elements.resultsArea.innerHTML += `<p class="submit-info" style="background-color: #d32f2f;">🚨 エラー: Google FormのURLが設定されていません。手動で結果を記録してください。</p>`;
+                elements.startButton.style.display = 'none'; 
+                return;
+            }
+
+            const TEST_TYPE_FOR_FORM = "UD代替フォント";
+            const scoreText = `${TEST_TYPE_FOR_FORM} (${count} / 10 正解)`;
+            const answersText = userAnswers.join('; ');
+            const missedText = missedWords.length > 0 ? missedWords.join(', ') : "なし";
+
+            const params = new URLSearchParams(ENTRY_PARAMS_SUFFIX.startsWith('?') ? ENTRY_PARAMS_SUFFIX.substring(1) : ENTRY_PARAMS_SUFFIX);
+            
+            params.append(ENTRY_ID_SCORE, scoreText);
+            params.append(ENTRY_ID_ANSWERS, answersText);
+            params.append(ENTRY_ID_MISSED, missedText);
+            
+            const finalUrl = FORM_VIEW_URL + "?" + params.toString();
+
+            elements.resultsArea.innerHTML = `
+                <h2>🎉 テスト完了</h2>
+                <p>正解数: <strong style="color: blue;">${count}</strong> / 10 語</p>
+                
+                <p style="color: red; font-weight: bold; margin: 15px 0;">
+                    ↓↓↓ 画面をスクロールして、下の提出ボタンを押してください ↓↓↓
+                </p>
+
+                <div class="submit-link-container">
+                    <p>データ収集にご協力いただきありがとうございます。匿名での提出を完了させるため、下のボタンをクリックしてください。</p>
+                    <a href="${finalUrl}" target="_blank">
+                        結果をGoogleフォームで提出する
+                    </a>
+                    <p style="margin-top: 10px; font-size: 14px; color: red;">※クリック後、開かれたフォームで内容が正しいことを確認し、「送信」ボタンを押してください。</p>
+                </div>
+            `;
+            elements.startButton.style.display = 'none'; 
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const elements = getElements(); 
+            
+            elements.consentCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', checkConsent);
+            });
+            
+            elements.startButton.addEventListener('click', () => { startTest(elements); }); 
+            elements.checkButton.addEventListener('click', () => { checkResults(elements); });
+            elements.nextButton.addEventListener('click', () => { elements.consentSection.style.display = 'none'; elements.testContent.style.display = 'block'; });
+            
+            checkConsent(); 
+        });
+    </script>
+</body>
+</html>
