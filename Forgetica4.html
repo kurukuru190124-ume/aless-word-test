@@ -91,8 +91,7 @@
     
     <script>
         // 🚨 以下の4つの値を、作成したGoogleフォームのIDに置き換えてください 🚨
-        const FORM_VIEW_URL = "https://docs.google.com/forms/d/e/1FAIpQLSfO53q6M5QRQRA_TcmRteDFsBsEdmsataFEWbvOUr6nVC40vg/viewform
-"; 
+        const FORM_VIEW_URL = "https://docs.google.com/forms/d/e/1FAIpQLSfO53q6M5QRQRA_TcmRteDFsBsEdmsataFEWbvOUr6nVC40vg/viewform"; 
         const ENTRY_ID_SCORE = "entry.1997135621"; 
         const ENTRY_ID_ANSWERS = "entry.1995717368"; 
         const ENTRY_ID_MISSED = "entry.1933301508"; 
@@ -157,8 +156,7 @@
         }
         
         function checkResults(elements) {
-            // ★修正箇所: correctCountをスコープ外に定義しなくても良いように、letで再定義
-            let correctCount = 0; // letを再挿入
+            let correctCount = 0; // ★修正済み
             if(answerTimerInterval) clearInterval(answerTimerInterval); elements.checkButton.disabled = true; 
             
             let userAnswers = []; 
@@ -212,12 +210,12 @@
             let htmlContent = "<h2>🎉 テスト完了</h2>";
             htmlContent += '<p>正解数: <strong style="color: blue;">' + count + '</strong> / 10 語</p>';
             
-            // スクロール指示
+            // スクロール指示 (見やすい標準フォントを使用)
             htmlContent += "<p style='color: red; font-weight: bold; margin: 15px 0;'>";
             htmlContent += "↓↓↓ 画面をスクロールして、下の提出ボタンを押してください ↓↓↓";
             htmlContent += "</p>";
 
-            // 提出ボタンコンテナ
+            // 提出ボタンコンテナ (見やすい標準フォントを使用)
             htmlContent += "<div class='submit-link-container'>";
             htmlContent += "<p>データ収集にご協力いただきありがとうございます。匿名での提出を完了させるため、下のボタンをクリックしてください。</p>";
             // 外部リンクの href に finalUrl を挿入 (シングルクォートで安全にラップ)
@@ -245,4 +243,5 @@
         });
     </script>
 </body>
+</html>
 </html>
