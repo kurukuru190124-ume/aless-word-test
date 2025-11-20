@@ -14,14 +14,15 @@
         #consent-section h2 { text-align: center; border-bottom: 2px solid #004d40; padding-bottom: 10px; margin-bottom: 20px; }
         .checkbox-item { margin-top: 10px; display: flex; align-items: flex-start; }
         
-        /* ★★★ 修正点: チェックボックスのサイズを直接指定 (均一化) ★★★ */
+        /* ★★★ 最終修正点: チェックボックスの表示安定化 ★★★ */
         .checkbox-item input[type="checkbox"] { 
-            width: 18px; 
-            height: 18px;
-            margin-right: 12px;
-            margin-top: 3px; 
+            width: 24px; 
+            height: 24px;
+            margin-right: 15px; 
+            margin-top: 3px; /* 以前の3pxに戻します */
             cursor: pointer;
-            /* transform: scale(1.2); は削除済み */
+            /* ★追加: 表示タイプを安定化 */
+            display: inline-block; 
         }
 
         .checkbox-item label { flex-grow: 1; }
@@ -93,7 +94,8 @@
     
     <script>
         // 🚨 以下の4つの値を、作成したGoogleフォームのIDに置き換えてください 🚨
-        const FORM_VIEW_URL = "https://docs.google.com/forms/d/e/1FAIpQLSfO53q6M5QRQRA_TcmRteDFsBsEdmsataFEWbvOUr6nVC40vg/viewform"; 
+        const FORM_VIEW_URL = "https://docs.google.com/forms/d/e/1FAIpQLSfO53q6M5QRQRA_TcmRteDFsBsEdmsataFEWbvOUr6nVC40vg/viewform
+"; 
         const ENTRY_ID_SCORE = "entry.1997135621"; 
         const ENTRY_ID_ANSWERS = "entry.1995717368"; 
         const ENTRY_ID_MISSED = "entry.1933301508"; 
