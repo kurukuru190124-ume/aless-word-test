@@ -28,9 +28,9 @@
         #next-button { display: none; margin-top: 20px; padding: 10px 20px; font-size: 18px; background-color: #ff6f00; color: white; border: none; border-radius: 5px; cursor: pointer; }
 
         /* 以下、テスト本体のスタイル */
-        /* ★修正点: 見出し(h1/h2)と段落(p)からSans Forgeticaの指定を削除し、bodyの標準フォントを継承させる */
-        #test-content h1, #test-content h2 { margin: 5px 0; } /* フォント指定を削除 */
-        #test-content p { margin: 5px 0; } /* フォント指定を削除 */
+        /* ★フォント設定の変更点: 見出し(h1/h2)と単語表示エリア(#word-container)のみSans Forgeticaを適用 */
+        #test-content h1, #test-content h2 { font-family: 'SansForgetica', Arial, sans-serif; margin: 5px 0; }
+        #test-content p { margin: 5px 0; }
         #word-container { font-family: 'SansForgetica', Arial, sans-serif; font-size: 100px; font-weight: 700; margin: 10px auto; color: #000000; height: 120px; line-height: 120px; visibility: hidden; }
         #timer { font-size: 28px; color: #bf360c; margin-bottom: 10px; }
         #test-area { max-width: 650px; margin: 20px auto; margin-top: 0; }
@@ -210,12 +210,12 @@
             let htmlContent = "<h2>🎉 テスト完了</h2>";
             htmlContent += '<p>正解数: <strong style="color: blue;">' + count + '</strong> / 10 語</p>';
             
-            // スクロール指示 (見やすい標準フォントを使用)
+            // スクロール指示
             htmlContent += "<p style='color: red; font-weight: bold; margin: 15px 0;'>";
             htmlContent += "↓↓↓ 画面をスクロールして、下の提出ボタンを押してください ↓↓↓";
             htmlContent += "</p>";
 
-            // 提出ボタンコンテナ (見やすい標準フォントを使用)
+            // 提出ボタンコンテナ
             htmlContent += "<div class='submit-link-container'>";
             htmlContent += "<p>データ収集にご協力いただきありがとうございます。匿名での提出を完了させるため、下のボタンをクリックしてください。</p>";
             // 外部リンクの href に finalUrl を挿入 (シングルクォートで安全にラップ)
